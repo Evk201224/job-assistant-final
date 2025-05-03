@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Job Assistant</h1>
+    <input type="file" id="resumeUpload" accept=".pdf,.doc,.docx" />
+    <textarea id="jobDescription" placeholder="Paste job description here..."></textarea>
+    <button onclick="adaptResume()">Adapt Resume</button>
+    <button onclick="downloadResume()">Download Adapted Resume</button>
+    <a id="applyLink" href="#" target="_blank">Apply Now</a>
+    <pre id="adaptedResume"></pre>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
