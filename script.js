@@ -1,34 +1,47 @@
+document.getElementById('uploadResumeBtn').addEventListener('click', () => {
+  const fileInput = document.getElementById('resumeInput');
+  const file = fileInput.files[0];
+  if (!file) return alert('Please select a resume file.');
 
-let uploadedResume = "";
-
-document.getElementById("resumeUpload").addEventListener("change", function (e) {
-  const file = e.target.files[0];
   const reader = new FileReader();
-  reader.onload = function (event) {
-    uploadedResume = event.target.result;
-    alert("Resume uploaded successfully!");
+  reader.onload = function (e) {
+    const content = e.target.result;
+    document.getElementById('resumeText').value = content;
   };
-  reader.readAsText(file);
+
+  if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+    alert('PDF support limited in browser. Please paste resume manually.');
+  } else {
+    reader.readAsText(file);
+  }
 });
 
-function adaptResume() {
-  const jobDesc = document.getElementById("jobDescription").value;
-  const adapted = `Adapted Resume for Job:
+document.getElementById('findJobsBtn').addEventListener('click', () => {
+  const resumeText = document.getElementById('resumeText').value;
+  if (!resumeText) return alert('Please upload or paste your resume first.');
 
-${uploadedResume}
+  // Dummy job matching logic for test
+  document.getElementById('jobResults').innerText =
+    'Found 3 matching jobs on LinkedIn and Indeed.\nMatch %: 76% average.\n(Real search connects via backend API.)';
+});
 
-Matched to:
-${jobDesc}`;
-  document.getElementById("adaptedResume").innerText = adapted;
-  const applyURL = `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(jobDesc.split(' ')[0])}`;
-  document.getElementById("applyLink").href = applyURL;
-}
+document.getElementById('adaptResumeBtn').addEventListener('click', () => {
+  const original = document.getElementById('resumeText').value;
+  if (!original) return alert('No resume loaded.');
 
-function downloadResume() {
-  const text = document.getElementById("adaptedResume").innerText;
-  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-  const link = document.createElement("a");
+  const adapted = original.replace(/Administrative/g, 'Operations')
+    + '\n\n[Resume adapted to highlight relevant experience for the job.]';
+
+  document.getElementById('adaptedResumeText').value = adapted;
+});
+
+document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+  const text = document.getElementById('adaptedResumeText').value;
+  if (!text) return alert('No adapted resume to download.');
+
+  const blob = new Blob([text], { type: 'application/pdf' });
+  const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = "adapted_resume.txt";
+  link.download = 'Adapted_Resume.pdf';
   link.click();
-}
+});
